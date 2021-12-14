@@ -19,7 +19,8 @@ public class Client implements Runnable{
         guest = server.accept();
         in = new BufferedReader(new InputStreamReader(guest.getInputStream()));
         out = new PrintWriter(guest.getOutputStream(), true);
-        run();
+        Thread thread = new Thread(this);
+        thread.start();
         out.println("connection established");
     }
 
@@ -28,7 +29,8 @@ public class Client implements Runnable{
         in = new BufferedReader(new InputStreamReader(guest.getInputStream()));
         out = new PrintWriter(guest.getOutputStream(), true);
         String confirm = in.readLine();
-        run();
+        Thread thread = new Thread(this);
+        thread.start();
         out.println("connection established");
     }
 
