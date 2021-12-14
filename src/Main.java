@@ -3,19 +3,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) {// java Main [from port] [to ip] [to port]
         try {
-            Client client = new Client(6666);
+            Client client = new Client(Integer.parseInt(args[1]));
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
             if (args[0].equalsIgnoreCase("recieve")) {
                 client.recieve();
             }else if (args[0].equalsIgnoreCase("connect")){
-                client.connect(args[1], Integer.parseInt(args[2]));
+                client.connect(args[2], Integer.parseInt(args[3]));
             }else {
                 System.out.println("unrecognized");
                 return;
             }
-
 
             while (true) {
                 String think = stdIn.readLine();
