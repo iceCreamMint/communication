@@ -7,13 +7,15 @@ public class Main {
         try {
             Client client = new Client(6666);
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-            switch (args[0]) {
-                case "receive":
-                    client.recieve();
-                    break;
-                case "connect":
-                    client.connect(args[1], Integer.parseInt(args[2]));
+            if (args[0].equalsIgnoreCase("recieve")) {
+                client.recieve();
+            }else if (args[0].equalsIgnoreCase("connect")){
+                client.connect(args[1], Integer.parseInt(args[2]));
+            }else {
+                System.out.println("unrecognized");
+                return;
             }
+
 
             while (true) {
                 String think = stdIn.readLine();
