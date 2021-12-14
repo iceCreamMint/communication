@@ -16,6 +16,8 @@ public class Main {
                 return;
             }
 
+            System.out.println("exited connection stage");
+
             while (true) {
                 String think = stdIn.readLine();
                 if (think.equalsIgnoreCase("/end")) {
