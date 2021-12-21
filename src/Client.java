@@ -24,6 +24,7 @@ public class Client implements Runnable{
         String waiting = in.readLine();
         if(waiting.equalsIgnoreCase("connection established")) {
             out.println("connection established");
+            System.out.println(waiting);
         }
         listener = new Thread(this);
         listener.start();
@@ -42,10 +43,10 @@ public class Client implements Runnable{
     public void terminate() throws IOException, InterruptedException {
         terminate = true;
         out.println("/reqterminate");
-        server.close();
-        guest.close();
         in.close();
         out.close();
+        server.close();
+        guest.close();
         listener.join();
     }
 
