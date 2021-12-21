@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
-    public static void main(String[] args) {// java Main [from port] [to ip] [to port]
+    public static void main(String[] args) {// java Main <function> [from port] [to ip] [to port]
         try {
             Client client = new Client(Integer.parseInt(args[1]));
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
