@@ -27,7 +27,7 @@ public class Main {
                     client.send(think);
                 }
             }
-        }catch (IOException e) {
+        }catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }

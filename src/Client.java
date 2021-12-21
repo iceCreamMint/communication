@@ -39,13 +39,14 @@ public class Client implements Runnable{
         listener.start();
     }
 
-    public void terminate() throws IOException {
+    public void terminate() throws IOException, InterruptedException {
         terminate = true;
         out.println("/reqterminate");
         server.close();
         guest.close();
         in.close();
         out.close();
+        listener.join();
     }
 
     public void send(String text) throws IOException {
@@ -63,7 +64,7 @@ public class Client implements Runnable{
                 }
                 System.out.println(think);
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
