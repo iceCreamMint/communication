@@ -34,9 +34,9 @@ public class Client implements Runnable{
         guest = new Socket(address, port);
         in = new BufferedReader(new InputStreamReader(guest.getInputStream()));
         out = new PrintWriter(guest.getOutputStream(), true);
+        out.println("connection established");
         listener = new Thread(this);
         listener.start();
-        out.println("connection established");
     }
 
     public void terminate() throws IOException {
