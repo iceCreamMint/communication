@@ -15,14 +15,22 @@ public class SingleUserHost implements Runnable {
 
     String outputFormat = "%s@%s(%d): %s";
 
-    public SingleUserHost(ChatServer parent, String username, Socket location) throws IOException {
+    Thread listener;
+
+    public SingleUserHost(ChatServer parent, Socket location) throws IOException {
         this.parent = parent;
 
         this.service = location;
-        this.username = username;
 
         this.outToUser = new PrintWriter(service.getOutputStream());
         this.inFromUser = new BufferedReader(new InputStreamReader(service.getInputStream()));
+
+        sendTo("name: ");
+        this.username = inFromUser.readLine();
+
+        sendFor("joined the room");
+
+        listener.start();
     }
 
     public void sendTo(String message) {
@@ -34,11 +42,25 @@ public class SingleUserHost implements Runnable {
         parent.ripple(this, finalOutput);
     }
 
+    public void terminate() throws InterruptedException, IOException {
+        listener.join();
+        inFromUser.close();
+        sendTo("closing connection");
+        outToUser.close();
+        service.close();
+    }
+
     @Override
     public void run() {
         try {
-            sendFor(inFromUser.readLine());
-        } catch (IOException e) {
+            String think = inFromUser.readLine();
+            if(think.equals("/leave")) {
+                sendFor(username + "has left the room");
+                terminate();
+            }else {
+                sendFor(inFromUser.readLine());
+            }
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
