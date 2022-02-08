@@ -18,6 +18,7 @@ public class ChatServer implements Runnable {
         lineup = new ArrayList<>();
 
         masterReader = new BufferedReader(new InputStreamReader(System.in));
+        masterListener = new Thread(this);
         masterListener.start();
         running = true;
 

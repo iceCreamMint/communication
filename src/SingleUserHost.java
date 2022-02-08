@@ -30,6 +30,7 @@ public class SingleUserHost implements Runnable {
 
         sendFor("joined the room");
 
+        listener = new Thread(this);
         listener.start();
     }
 
