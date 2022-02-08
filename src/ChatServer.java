@@ -1,4 +1,5 @@
 import java.io.*;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -43,8 +44,10 @@ public class ChatServer implements Runnable {
         for(SingleUserHost r: lineup) {
             r.terminate();
         }
-        terminator = new Socket(host.getInetAddress(), host.getLocalPort());
-        lineup.get(0).terminate();
+//        terminator = new Socket(InetAddress.getLocalHost(), host.getLocalPort());
+//        lineup.get(0).terminate();
+        //this now just throws an exception to end the server :trolldespair:
+        //but it works ig
         host.close();
     }
 
