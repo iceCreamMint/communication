@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ChatClient implements Runnable{
+    boolean running;
+
     BufferedReader userInput;
     BufferedReader serverInput;
     PrintWriter toWriteToServer;
@@ -20,19 +22,32 @@ public class ChatClient implements Runnable{
         toWriteToServer = new PrintWriter(connection.getOutputStream());
         listener.start();
         toWriteToServer.println("/connect");
+        running = true;
 
+    }
+
+    public void readUser() throws IOException {
+        send(userInput.readLine());
     }
 
     public void send(String message) {
         toWriteToServer.println(message);
     }
 
-    public void terminate() {
-
+    public void terminate() throws InterruptedException, IOException {
+        listener.join();
+        userInput.close();
+        serverInput.close();
+        toWriteToServer.close();
+        connection.close();
     }
 
     public static void main(String[] args) throws IOException {
         ChatClient client = new ChatClient(Integer.parseInt(args[0]), args[1], Integer.parseInt(args[2]));
+
+        while(client.running) {
+            client.readUser();
+        }
     }
 
     @Override
@@ -40,12 +55,13 @@ public class ChatClient implements Runnable{
         try {
             String think = serverInput.readLine();
             if(think.equals("/leave")) {
+                running = false;
                 terminate();
             }else {
                 System.out.println(think);
             }
 
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
