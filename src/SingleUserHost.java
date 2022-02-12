@@ -25,8 +25,11 @@ public class SingleUserHost implements Runnable {
         this.outToUser = new PrintWriter(service.getOutputStream());
         this.inFromUser = new BufferedReader(new InputStreamReader(service.getInputStream()));
 
-        sendTo("name: ");
-        this.username = inFromUser.readLine();
+        String connectionTest = inFromUser.readLine();
+        if(connectionTest.equalsIgnoreCase("/connect")) {
+            sendTo("name: ");
+            this.username = inFromUser.readLine();
+        }
 
         sendFor("joined the room");
 
@@ -47,6 +50,7 @@ public class SingleUserHost implements Runnable {
         listener.join();
         inFromUser.close();
         sendTo("closing connection");
+        sendTo("/leave");
         outToUser.close();
         service.close();
     }
