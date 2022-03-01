@@ -26,7 +26,7 @@ public class SingleUserHost implements Runnable {
         this.inFromUser = new BufferedReader(new InputStreamReader(service.getInputStream()));
 
         String waiting = inFromUser.readLine();
-        if(waiting.equalsIgnoreCase("/connect")){
+        if(waiting.equalsIgnoreCase("connect")){
             outToUser.println("connected to server");
         }
         sendTo("name: ");
