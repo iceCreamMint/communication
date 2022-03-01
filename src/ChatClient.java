@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ChatClient implements Runnable{
@@ -11,10 +12,13 @@ public class ChatClient implements Runnable{
     BufferedReader serverInput;
     PrintWriter toWriteToServer;
     Socket connection;
+    ServerSocket server;
 
     Thread listener;
 
     public ChatClient(int fromPort, String connectTo, int toPort) throws IOException {
+        server = new ServerSocket(fromPort);
+        System.out.println("server established");
         connection = new Socket(connectTo, toPort);
         serverInput = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         toWriteToServer = new PrintWriter(connection.getOutputStream(), true);
@@ -22,6 +26,15 @@ public class ChatClient implements Runnable{
         listener = new Thread(this);
         listener.start();
     }
+
+//    public void connect(String connectTo, int toPort) throws IOException {
+//        connection = new Socket(connectTo, toPort);
+//        serverInput = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//        toWriteToServer = new PrintWriter(connection.getOutputStream(), true);
+//        toWriteToServer.println("connect");
+//        listener = new Thread(this);
+//        listener.start();
+//    }
 
     public void readUser() throws IOException {
         send(userInput.readLine());
