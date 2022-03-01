@@ -14,13 +14,14 @@ public class ChatClient implements Runnable{
 
     Thread listener;
 
-    public ChatClient(int fromPort, String connectTo, int toPort) throws IOException {
+    public ChatClient(int fromPort, String connectTo, int toPort) throws IOException, InterruptedException {
         listener = new Thread(this);
         connection = new Socket(connectTo, toPort);
         userInput = new BufferedReader(new InputStreamReader(System.in));
         serverInput = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         toWriteToServer = new PrintWriter(connection.getOutputStream());
         listener.start();
+        wait(1000);
         toWriteToServer.println("/connect");
         running = true;
 
@@ -42,7 +43,7 @@ public class ChatClient implements Runnable{
         connection.close();
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         ChatClient client = new ChatClient(Integer.parseInt(args[0]), args[1], Integer.parseInt(args[2]));
 
         while(client.running) {

@@ -28,6 +28,7 @@ public class ChatServer implements Runnable {
 
     public void welcome() throws IOException {
         Socket hold = host.accept();
+        System.out.println("working");
         lineup.add(new SingleUserHost(this, hold));
     }
 
