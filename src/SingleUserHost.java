@@ -25,11 +25,8 @@ public class SingleUserHost implements Runnable {
         this.outToUser = new PrintWriter(service.getOutputStream());
         this.inFromUser = new BufferedReader(new InputStreamReader(service.getInputStream()));
 
-        String connectionTest = inFromUser.readLine();
-        if(connectionTest.equalsIgnoreCase("/connect")) {
-            sendTo("name: ");
-            this.username = inFromUser.readLine();
-        }
+        sendTo("name: ");
+        this.username = inFromUser.readLine();
 
         sendFor("joined the room");
 
