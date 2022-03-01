@@ -22,10 +22,15 @@ public class SingleUserHost implements Runnable {
 
         this.service = location;
 
-        this.outToUser = new PrintWriter(service.getOutputStream());
+        this.outToUser = new PrintWriter(service.getOutputStream(), true);
         this.inFromUser = new BufferedReader(new InputStreamReader(service.getInputStream()));
 
+        String waiting = inFromUser.readLine();
+        if(waiting.equalsIgnoreCase("/connect")){
+            outToUser.println("connected to server");
+        }
         sendTo("name: ");
+        System.out.println("working2");
         this.username = inFromUser.readLine();
 
         sendFor("joined the room");
