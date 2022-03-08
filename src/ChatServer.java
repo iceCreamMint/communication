@@ -33,6 +33,7 @@ public class ChatServer implements Runnable {
     }
 
     public void ripple(SingleUserHost user, String message) {
+        System.out.println(message);
         for(SingleUserHost r: lineup) {
             if(r != user) {
                 r.sendTo(message);
