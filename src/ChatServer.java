@@ -8,7 +8,7 @@ public class ChatServer implements Runnable {
     private ServerSocket host;
     private ArrayList<SingleUserHost> lineup;
 
-    private Socket terminator;
+    private SingleUserHost terminator;
 
     BufferedReader masterReader;
     Thread masterListener;
@@ -29,16 +29,26 @@ public class ChatServer implements Runnable {
     public void welcome() throws IOException {
         Socket hold = host.accept();
         System.out.println("working");
-        lineup.add(new SingleUserHost(this, hold));
+        //lineup.add(new SingleUserHost(this, hold));
+        //debug
+        terminator = new SingleUserHost(this, hold);
     }
 
     public void ripple(SingleUserHost user, String message) {
         System.out.println(message);
-        for(SingleUserHost r: lineup) {
-            if(r != user) {
-                r.sendTo(message);
-            }
-        }
+//        for(SingleUserHost r: lineup) {
+//            if(r != user) {
+//                r.sendTo(message);
+//            }
+//        }
+        terminator.sendTo(message);
+    }
+    public void ripple(String message) {
+        System.out.println(message);
+//        for(SingleUserHost r: lineup) {
+//            r.sendTo(message);
+//        }
+        terminator.sendTo(message);
     }
 
     public void end() throws IOException, InterruptedException {
@@ -63,9 +73,13 @@ public class ChatServer implements Runnable {
     @Override
     public void run() {
         try {
-            String think = masterReader.readLine();
-            if(think.equals("/end")) {
-                end();
+            while(running) {
+                String think = masterReader.readLine();
+                if (think.equals("/end")) {
+                    end();
+                } else {
+                    ripple(think);
+                }
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

@@ -26,11 +26,11 @@ public class SingleUserHost implements Runnable {
         this.inFromUser = new BufferedReader(new InputStreamReader(service.getInputStream()));
 
         String waiting = inFromUser.readLine();
-        if(waiting.equalsIgnoreCase("connect")){
-            outToUser.println("connected to server");
-        }
-        sendTo("name: ");
         System.out.println("working2");
+        if(waiting.equalsIgnoreCase("connect")){
+            outToUser.println("connected to server \ngive name:");
+        }
+
         this.username = inFromUser.readLine();
 
         sendFor("joined the room");
@@ -44,7 +44,7 @@ public class SingleUserHost implements Runnable {
     }
 
     public void sendFor(String message) {
-        String finalOutput = String.format(outputFormat, username, service.getInetAddress(), service.getPort(), message);
+        String finalOutput = String.format(outputFormat, username, service.getInetAddress(), service.getPort(), " " + message);
         parent.ripple(this, finalOutput);
     }
 
@@ -60,12 +60,14 @@ public class SingleUserHost implements Runnable {
     @Override
     public void run() {
         try {
-            String think = inFromUser.readLine();
-            if(think.equals("/leave")) {
-                sendFor(username + "has left the room");
-                terminate();
-            }else {
-                sendFor(inFromUser.readLine());
+            while(parent.running) {
+                String think = inFromUser.readLine();
+                if (think.equals("/leave")) {
+                    sendFor(username + "has left the room");
+                    terminate();
+                } else {
+                    sendFor(think);
+                }
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

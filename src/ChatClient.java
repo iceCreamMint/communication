@@ -36,8 +36,14 @@ public class ChatClient implements Runnable{
 //        listener.start();
 //    }
 
-    public void readUser() throws IOException {
-        send(userInput.readLine());
+    public void readUser() throws IOException, InterruptedException {
+        String think = userInput.readLine();
+        if(think.equalsIgnoreCase("/leave")) {
+            running = false;
+            terminate();
+        }else {
+            send(think);
+        }
     }
 
     public void send(String message) {
@@ -52,7 +58,7 @@ public class ChatClient implements Runnable{
         connection.close();
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         ChatClient client = new ChatClient(Integer.parseInt(args[0]), args[1], Integer.parseInt(args[2]));
 
         client.userInput = new BufferedReader(new InputStreamReader(System.in));
@@ -65,15 +71,11 @@ public class ChatClient implements Runnable{
     @Override
     public void run() {
         try {
-            String think = serverInput.readLine();
-            if(think.equals("/leave")) {
-                running = false;
-                terminate();
-            }else {
+            while (running) {
+                String think = serverInput.readLine();
                 System.out.println(think);
             }
-
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
