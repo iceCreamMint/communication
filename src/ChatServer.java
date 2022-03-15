@@ -29,26 +29,26 @@ public class ChatServer implements Runnable {
     public void welcome() throws IOException {
         Socket hold = host.accept();
         System.out.println("working");
-        //lineup.add(new SingleUserHost(this, hold));
+        lineup.add(new SingleUserHost(this, hold));
         //debug
-        terminator = new SingleUserHost(this, hold);
+//        terminator = new SingleUserHost(this, hold);
     }
 
     public void ripple(SingleUserHost user, String message) {
         System.out.println(message);
-//        for(SingleUserHost r: lineup) {
-//            if(r != user) {
-//                r.sendTo(message);
-//            }
-//        }
-        terminator.sendTo(message);
+        for(SingleUserHost r: lineup) {
+            if(r != user) {
+                r.sendTo(message);
+            }
+        }
+//        terminator.sendTo(message);
     }
     public void ripple(String message) {
         System.out.println(message);
-//        for(SingleUserHost r: lineup) {
-//            r.sendTo(message);
-//        }
-        terminator.sendTo(message);
+        for(SingleUserHost r: lineup) {
+            r.sendTo(message);
+        }
+//        terminator.sendTo(message);
     }
 
     public void end() throws IOException, InterruptedException {

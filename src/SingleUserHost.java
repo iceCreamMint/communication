@@ -7,7 +7,8 @@ import java.net.Socket;
 public class SingleUserHost implements Runnable {
     ChatServer parent;
 
-    Socket service;
+    Socket serviceIn;
+    Socket serviceOut;
     String username;
 
     PrintWriter outToUser;
@@ -19,18 +20,14 @@ public class SingleUserHost implements Runnable {
 
     public SingleUserHost(ChatServer parent, Socket location) throws IOException {
         this.parent = parent;
+        this.serviceIn = location;
 
-        this.service = location;
+        this.inFromUser = new BufferedReader(new InputStreamReader(serviceIn.getInputStream()));
 
-        this.outToUser = new PrintWriter(service.getOutputStream(), true);
-        this.inFromUser = new BufferedReader(new InputStreamReader(service.getInputStream()));
+        serviceOut = new Socket(serviceIn.getInetAddress(), Integer.parseInt(inFromUser.readLine()));
+        this.outToUser = new PrintWriter(serviceOut.getOutputStream(), true);
 
-        String waiting = inFromUser.readLine();
-        System.out.println("working2");
-        if(waiting.equalsIgnoreCase("connect")){
-            outToUser.println("connected to server \ngive name:");
-        }
-
+        outToUser.println("give name");
         this.username = inFromUser.readLine();
 
         sendFor("joined the room");
@@ -44,7 +41,7 @@ public class SingleUserHost implements Runnable {
     }
 
     public void sendFor(String message) {
-        String finalOutput = String.format(outputFormat, username, service.getInetAddress(), service.getPort(), " " + message);
+        String finalOutput = String.format(outputFormat, username, serviceIn.getInetAddress(), serviceIn.getPort(), " " + message);
         parent.ripple(this, finalOutput);
     }
 
@@ -54,7 +51,8 @@ public class SingleUserHost implements Runnable {
         sendTo("closing connection");
         sendTo("/leave");
         outToUser.close();
-        service.close();
+        serviceIn.close();
+        serviceOut.close();
     }
 
     @Override

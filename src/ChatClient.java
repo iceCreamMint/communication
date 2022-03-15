@@ -20,9 +20,9 @@ public class ChatClient implements Runnable{
         server = new ServerSocket(fromPort);
         System.out.println("server established");
         connection = new Socket(connectTo, toPort);
-        serverInput = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         toWriteToServer = new PrintWriter(connection.getOutputStream(), true);
-        toWriteToServer.println("connect");
+        toWriteToServer.println(fromPort);
+        serverInput = new BufferedReader(new InputStreamReader(server.accept().getInputStream()));
         listener = new Thread(this);
         listener.start();
     }
