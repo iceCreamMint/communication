@@ -23,6 +23,7 @@ public class ChatClient implements Runnable{
         toWriteToServer = new PrintWriter(connection.getOutputStream(), true);
         toWriteToServer.println(fromPort);
         serverInput = new BufferedReader(new InputStreamReader(server.accept().getInputStream()));
+        running = true;
         listener = new Thread(this);
         listener.start();
     }
@@ -62,7 +63,6 @@ public class ChatClient implements Runnable{
         ChatClient client = new ChatClient(Integer.parseInt(args[0]), args[1], Integer.parseInt(args[2]));
 
         client.userInput = new BufferedReader(new InputStreamReader(System.in));
-        client.running = true;
         while(client.running) {
             client.readUser();
         }

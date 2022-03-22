@@ -46,13 +46,13 @@ public class SingleUserHost implements Runnable {
     }
 
     public void terminate() throws InterruptedException, IOException {
-        listener.join();
         inFromUser.close();
-        sendTo("closing connection");
+        sendTo("server is closing connection");
         sendTo("/leave");
         outToUser.close();
         serviceIn.close();
         serviceOut.close();
+        listener.join();
     }
 
     @Override

@@ -78,7 +78,7 @@ public class ChatServer implements Runnable {
                 if (think.equals("/end")) {
                     end();
                 } else {
-                    ripple(think);
+                    ripple("SERVER_ANNOUNCE: " + think);
                 }
             }
         } catch (IOException | InterruptedException e) {
